@@ -29,3 +29,23 @@ export async function getSwipe(req, res, next) {
         next(error);
     }
 }
+
+export async function sendSwipe(req, res, next) {
+    const { receiverId, type } = req.body;
+    const types = ['like', 'dislike', 'superlike'];
+    try{
+        if (!types.includes(type)) {
+            return res.status(400).json({ message: 'Invalid swipe type' });
+        }
+        await pool.query('INSERT INTO swipes (sender_id, receiver_id, type) VALUES (?, ?, ?)', [req.user.id, receiverId, type]);
+        const [mutualLike] = await pool.query('SELECT * FROM swipes WHERE sender_id = ? AND receiver_id = ? AND (type = "like" OR type = "superlike")', [receiverId, req.user.id]);
+        if ((type === 'like' || type === 'superlike') && mutualLike.length > 0) {
+            await pool.query('INSERT INTO matches (user_one_id, user_two_id) VALUES (?, ?)', [Math.min(req.user.id, receiverId), Math.max(req.user.id, receiverId)]);
+            return res.status(200).json({ message: 'It\'s a match!' });
+        }
+        res.status(200).json({ message: 'Swipe recorded successfully' });
+    }
+    catch (error) {
+        next(error);
+    }
+}
