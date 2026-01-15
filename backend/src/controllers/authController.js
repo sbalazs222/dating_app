@@ -15,7 +15,7 @@ export async function register(req, res, next) {
         if (exists.length > 0) {
             return res.status(409).json({ message: 'Username or email already exists' });
         }
-        await pool.query('INSERT INTO users (username, password_hash, email, full_name, birth_date, gender, bio, coords) VALUES (?, ?, ?, ?, ?, ?, ?, ST_GeomFromText(?))', [username, hashedPassword, email, fullname, birthdate, gender, bio, `POINT(${latitude} ${longitude})`]);
+        await pool.query('INSERT INTO users (username, password_hash, email, full_name, birth_date, gender, bio, coords) VALUES (?, ?, ?, ?, ?, ?, ?, ST_GeomFromText(?))', [username, hashedPassword, email, fullname, birthdate, gender, bio, `POINT(${longitude} ${latitude})`]);
         res.status(201).json({ message: 'User registered successfully'});
     }
     catch (error) {

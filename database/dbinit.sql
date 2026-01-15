@@ -43,9 +43,9 @@ CREATE TABLE matches (
 
 -- MINTAADATOK FELTÖLTÉSE
 INSERT INTO users (username, email, password_hash, full_name, birth_date, gender, bio, coords) VALUES
-('kovacs_bela', 'bela@example.com', 'hashed_pw_1', 'Kovács Béla', '2000-05-15', 'male', 'Szeretem a kutyákat és a kódolást.', ST_GeomFromText('POINT(47.4979 19.0402)')),
-('nagy_anna', 'anna@example.com', 'hashed_pw_2', 'Nagy Anna', '2002-08-22', 'female', 'Kávéfüggő és világutazó.', ST_GeomFromText('POINT(47.4733 19.0597)')),
-('szabo_zoli', 'zoli@example.com', 'hashed_pw_3', 'Szabó Zoltán', '1998-12-01', 'male', 'Gitározom és túrázom.', ST_GeomFromText('POINT(47.5316 19.0307)'));
+('kovacs_bela', 'bela@example.com', 'hashed_pw_1', 'Kovács Béla', '2000-05-15', 'male', 'Szeretem a kutyákat és a kódolást.', ST_GeomFromText('POINT(19.0402 47.4979)')),
+('nagy_anna', 'anna@example.com', 'hashed_pw_2', 'Nagy Anna', '2002-08-22', 'female', 'Kávéfüggő és világutazó.', ST_GeomFromText('POINT(19.0597 47.4733)')),
+('szabo_zoli', 'zoli@example.com', 'hashed_pw_3', 'Szabó Zoltán', '1998-12-01', 'male', 'Gitározom és túrázom.', ST_GeomFromText('POINT(19.0307 47.5316)'));
 
 
 -- Egy példa Like: Béla lájkolja Annát
