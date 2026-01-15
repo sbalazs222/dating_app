@@ -40,3 +40,6 @@ export async function login(req, res, next) {
         next(error);
     }
 }
+export function logout(req, res) {
+    res.clearCookie('token').status(200).json({ message: 'Logout successful' });
+}
