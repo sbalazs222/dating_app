@@ -10,7 +10,7 @@ const requiredEnvVars = [
 ];
 
 requiredEnvVars.forEach((varName) => {
-    if (!process.env[varName] || varName !== 'DB_PASSWORD') {
+    if (!process.env[varName] && varName !== 'DB_PASSWORD') {
         throw new Error(`Environment variable ${varName} is not set.`);
     }
 });

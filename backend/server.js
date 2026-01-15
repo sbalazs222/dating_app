@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { colorLog, errorLog } from 'psgutil'
 
-import authRoutes from './routes/authRoutes.js';
+import authRoutes from './src/routes/authRoutes.js';
 
 // Initialize Express app
 const app = express();
