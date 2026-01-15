@@ -21,3 +21,5 @@ export const dbConfig = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 };
+
+export const jwtSecret = process.env.JWT_SECRET;
