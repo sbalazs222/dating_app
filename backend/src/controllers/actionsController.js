@@ -1,13 +1,13 @@
 import { pool } from '../config/dbConfig.js';
 
 export async function getSwipe(req, res, next) {
-
+    const preferedGender = req.cookies.preferences || 'all';
     const { distanceLimitKm } = req.body;
     try {
         const [users] = await pool.query(`
                 SELECT id, username, full_name, birth_date, gender, bio, ST_Distance_Sphere(coords, ST_GeomFromText(?)) AS distance 
                 FROM users 
-                WHERE ST_Distance_Sphere(coords, ST_GeomFromText(?)) <= ?`, [req.user.coords, req.user.coords, distanceLimitKm * 1000]);
+                WHERE ST_Distance_Sphere(coords, ST_GeomFromText(?)) <= ? AND (gender = ? OR ? = 'all')`, [req.user.coords, req.user.coords, distanceLimitKm * 1000, preferedGender, preferedGender]);
         const [existingSwipes] = await pool.query('SELECT receiver_id FROM swipes WHERE sender_id = ?', [req.user.id]);
         const swipedUserIds = existingSwipes.map(swipe => swipe.receiver_id);
         
@@ -48,4 +48,16 @@ export async function sendSwipe(req, res, next) {
     catch (error) {
         next(error);
     }
+}
+
+export async function managePreferences(req, res, next) {
+    const { preferedGender } = req.body;
+    const valid = ['male', 'female', 'all'];
+    if (!valid.includes(preferedGender)) {
+        return res.status(400).json({ message: 'Invalid preference value' });
+    }
+    res.clearCookie('preferences')
+    .cookie('preferences', preferedGender, { httpOnly: true, sameSite: 'lax' })
+    .status(200)
+    .json({ message: 'Preferences updated successfully' });
 }
