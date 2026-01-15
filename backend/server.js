@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { colorLog, errorLog } from 'psgutil'
 
 import authRoutes from './src/routes/authRoutes.js';
+import actionRoutes from './src/routes/actionsRoutes.js';
 
 // Initialize Express app
 const app = express();
@@ -19,6 +20,7 @@ app.use(colorLog);
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/actions', actionRoutes);
 
 // Start server
 app.listen(3000, () => {
