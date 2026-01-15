@@ -22,6 +22,7 @@ export async function getSwipe(req, res, next) {
         
         const randomIndex = Math.floor(Math.random() * availableUsers.length);
         const randomUser = availableUsers[randomIndex];
+        randomUser.distance = Number((randomUser.distance / 1000).toFixed(2));
         
         res.status(200).json({ user: randomUser });
     }
@@ -53,11 +54,16 @@ export async function sendSwipe(req, res, next) {
 export async function managePreferences(req, res, next) {
     const { preferedGender } = req.body;
     const valid = ['male', 'female', 'all'];
-    if (!valid.includes(preferedGender)) {
-        return res.status(400).json({ message: 'Invalid preference value' });
+    try {
+        if (!valid.includes(preferedGender)) {
+            return res.status(400).json({ message: 'Invalid preference value' });
+        }
+        res.clearCookie('preferences')
+        .cookie('preferences', preferedGender, { httpOnly: true, sameSite: 'lax' })
+        .status(200)
+        .json({ message: 'Preferences updated successfully' });
     }
-    res.clearCookie('preferences')
-    .cookie('preferences', preferedGender, { httpOnly: true, sameSite: 'lax' })
-    .status(200)
-    .json({ message: 'Preferences updated successfully' });
+    catch (error) {
+        next(error);
+    }
 }

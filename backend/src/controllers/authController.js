@@ -33,12 +33,17 @@ export async function login(req, res, next) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
         const token = generateToken({id: exists[0].id, username: exists[0].username, coords: exists[0].coords});
-        res.cookie('token', token, { httpOnly: true, sameSite: 'lax' }).status(200).json({ message: 'Login successful' });
+        res.cookie('token', token, { httpOnly: true, sameSite: 'lax' })
+        .status(200)
+        .json({ message: 'Login successful' });
     }
     catch (error) {
         next(error);
     }
 }
 export function logout(req, res) {
-    res.clearCookie('token').status(200).json({ message: 'Logout successful' });
+    res.clearCookie('token')
+    .clearCookie('preferences')
+    .status(200)
+    .json({ message: 'Logout successful' });
 }
